@@ -1,0 +1,43 @@
+@TaskTrack_HostAddress = http://localhost:5182
+
+###
+
+### 1. Get all tasks
+GET {{TaskTrack_HostAddress}}/api/Task
+Accept: application/json
+
+###
+
+### 2. Create a new task
+POST {{TaskTrack_HostAddress}}/api/Task
+Content-Type: application/json
+
+{
+  "name": "Implement JWT Authentication",
+  "description": "Secure API endpoints and configure token-based authentication",
+  "IsCompleted": false
+}
+
+###
+
+### 3. Get a specific task by ID
+GET {{TaskTrack_HostAddress}}/api/Task/1
+Accept: application/json
+
+###
+
+### 4. Update an existing task
+PUT {{TaskTrack_HostAddress}}/api/task/1
+Content-Type: application/json
+
+{
+  "id": 1,
+  "name": "Implement JWT Authentication - Completed",
+  "description": "Successfully secured all endpoints and tested successfully",
+  "IsCompleted": true
+}
+
+###
+
+### 5. Delete a task by ID
+DELETE {{TaskTrack_HostAddress}}/api/Task/1
