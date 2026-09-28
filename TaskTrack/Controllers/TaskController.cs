@@ -17,9 +17,35 @@ public class TaskController : ControllerBase
     }
 
     [HttpGet]
-    public async Task<ActionResult<IEnumerable<TaskItem>>> GetTasks()
+    public async Task<ActionResult<IEnumerable<TaskItem>>> GetTasks(
+        [FromQuery] bool? isCompleted,
+        [FromQuery] string? search,
+        [FromQuery] int pageNumber = 1,
+        [FromQuery] int pageSize = 10)
     {
-        return await _context.Tasks.ToListAsync();
+        var query = _context.Tasks.AsQueryable();
+
+        if (isCompleted.HasValue)
+        {
+            query = query.Where(t => t.IsCompleted == isCompleted.Value);
+        }
+
+        if (!string.IsNullOrWhiteSpace(search))
+        {
+            query = query.Where(t =>
+                t.Name.Contains(search) 
+                || (t.Description != null && t.Description.Contains(search)));
+        }
+        
+        pageNumber = pageNumber < 1 ? 1 : pageNumber;
+        pageSize = pageSize < 1 ? 10 : pageSize;
+        
+        var tasks = await query
+            .Skip((pageNumber - 1) * pageSize)
+            .Take(pageSize)
+            .ToListAsync();
+        
+        return Ok(tasks);
     }
 
     [HttpGet("{id}")]
