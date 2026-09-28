@@ -79,4 +79,10 @@ public class TaskController : ControllerBase
         
         return NoContent();
     }
+
+    [HttpGet("error-test")]
+    public IActionResult ThrowError()
+    {
+        throw new Exception("Test error handling middleware.");
+    }
 }
